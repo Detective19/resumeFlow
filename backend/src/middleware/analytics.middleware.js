@@ -25,6 +25,10 @@ const analyticsMiddleware = (req, res, next) => {
                 const country = req.headers['x-vercel-ip-country'] || (geo ? geo.country : 'Unknown');
                 const city = req.headers['x-vercel-ip-city'] || (geo ? geo.city : 'Unknown');
 
+                if (country === 'Unknown') {
+                    console.log('Analytics Location Unknown. Headers:', JSON.stringify(req.headers));
+                }
+
                 const userAgent = req.headers['user-agent'];
                 const parser = new UAParser(userAgent);
                 const result = parser.getResult();
