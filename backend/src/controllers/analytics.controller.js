@@ -199,14 +199,12 @@ const trackView = async (req, res) => {
         const referrer = req.headers['referer'] || 'Direct';
 
         // 4. Save to Database
-        const vNum = version ? parseInt(version, 10) : null;
-
         await prisma.analyticsEvent.create({
             data: {
                 username,
                 resumeType,
                 profileName: targetProfileName,
-                versionNumber: isNaN(vNum) ? null : vNum,
+                versionNumber: version ? parseInt(version) : null,
                 country,
                 city,
                 device: normalizedDevice,
