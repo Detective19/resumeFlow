@@ -7,14 +7,13 @@ const {
 } = require('../controllers/public.controller');
 const router = express.Router();
 
-router.use(analyticsMiddleware);
 
 // Master Resume Routes
-router.get('/:username', getPublicResume);
-router.get('/:username/:version', getPublicResumeVersion);
+router.get('/:username', analyticsMiddleware, getPublicResume);
+router.get('/:username/:version', analyticsMiddleware, getPublicResumeVersion);
 
 // Locked Profile Routes
-router.get('/:username/v/:profileName', getPublicLockedProfile);
-router.get('/:username/v/:profileName/:version', getPublicLockedProfileVersion);
+router.get('/:username/v/:profileName', analyticsMiddleware, getPublicLockedProfile);
+router.get('/:username/v/:profileName/:version', analyticsMiddleware, getPublicLockedProfileVersion);
 
 module.exports = router;
