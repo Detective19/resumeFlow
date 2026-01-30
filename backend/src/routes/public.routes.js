@@ -7,7 +7,7 @@ const {
 } = require('../controllers/public.controller');
 const router = express.Router();
 
-// router.use(analyticsMiddleware); // Removed: Switched to client-side tracking using /analytics/track
+router.use(analyticsMiddleware);
 
 // Master Resume Routes
 router.get('/:username', getPublicResume);
