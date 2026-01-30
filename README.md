@@ -2,7 +2,7 @@
 
 **Version control for professional resumes** — because your career evolves, and your resume should track it.
 
-![Tech Stack](https://img.shields.io/badge/React-18-blue) ![Node.js](https://img.shields.io/badge/Node.js-Express-green) ![Database](https://img.shields.io/badge/Database-PostgreSQL-blue)
+![Tech Stack](https://img.shields.io/badge/React-18-blue) ![Node.js](https://img.shields.io/badge/Node.js-Express-green) ![Database](https://img.shields.io/badge/Database-MySQL-blue)
 
 ---
 
@@ -59,7 +59,7 @@ Built with modern, industry-standard technologies:
 
 ### **Backend**
 - **Node.js + Express** — Fast, minimalist web framework
-- **PostgreSQL** — Reliable, production-grade relational database
+- **MySQL** — Reliable, production-grade relational database
 - **Prisma ORM** — Modern database toolkit with type-safety
 - **JWT** — Industry-standard authentication
 - **bcrypt** — Secure password hashing
@@ -92,7 +92,7 @@ Want to try ResumeFlow on your machine? Follow these simple steps:
 ### **Prerequisites**
 Make sure you have these installed:
 - Node.js (v16 or higher) — [Download here](https://nodejs.org/)
-- PostgreSQL — [Download here](https://www.postgresql.org/download/)
+- MySQL — [Download here](https://dev.mysql.com/downloads/installer/)
 - npm or yarn (comes with Node.js)
 
 ---
@@ -120,11 +120,11 @@ cp .env.example .env
 
 **Edit the `.env` file** and add your database connection:
 ```env
-DATABASE_URL="postgresql://username:password@localhost:5432/resumeflow"
+DATABASE_URL="mysql://username:password@localhost:3306/resumeflow"
 JWT_SECRET="your-secret-key-here"
 PORT=5000
 
-# Replace 'username' and 'password' with your PostgreSQL credentials
+# Replace 'username' and 'password' with your MySQL credentials
 ```
 
 **Initialize the database:**
