@@ -1,5 +1,5 @@
 
-import axios from 'axios';  // Using axios inside the function if environment supports module resolution, or native fetch
+// Native fetch used for Vercel Serverless Function to avoid dependency issues
 // Vercel serverless functions support standard Node.js. 
 // However, 'axios' from frontend dependencies might not be bundled cleanly in a separate API function unless specified.
 // Safe bet is native 'fetch' or careful import. 
