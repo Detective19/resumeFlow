@@ -50,18 +50,11 @@ export default function PublicResume() {
 
         const trackView = async () => {
             try {
-                // Determine endpoint based on environment
-                // Local Dev (Vite): internal /api won't work without vercel dev, so hit backend directly
-                // Production (Vercel): use /api/analytics/track proxy to capture headers
-                const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
                 const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
-
-                const endpoint = isLocal ? `${baseUrl}/analytics/track` : '/api/analytics/track';
-
-                await axios.post(endpoint, {
+                await axios.post(`${baseUrl}/analytics/track`, {
                     username,
-                    version: version || null,
-                    profileName: profileName || null,
+                    version,
+                    profileName,
                     userAgent: navigator.userAgent,
                     platform: navigator.platform,
                     screenWidth: window.innerWidth
