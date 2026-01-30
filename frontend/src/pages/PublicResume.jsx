@@ -33,6 +33,11 @@ export default function PublicResume() {
                     }
                 }
 
+                // Cache Busting: Append timestamp to force fresh request
+                const timestamp = Date.now();
+                const separator = url.includes('?') ? '&' : '?';
+                url += `${separator}_t=${timestamp}`;
+
                 const response = await axios.get(url);
                 setData(response.data.content); // ResumeVersion.content is the JSON
             } catch (err) {
