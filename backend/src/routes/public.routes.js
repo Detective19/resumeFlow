@@ -1,19 +1,23 @@
 const express = require('express');
 const {
-    getPublicResume,
-    getPublicResumeVersion,
-    getPublicLockedProfile,
-    getPublicLockedProfileVersion
+getPublicResume,
+getPublicResumeVersion,
+getPublicLockedProfile,
+getPublicLockedProfileVersion
 } = require('../controllers/public.controller');
+const analyticsMiddleware = require('../middleware/analytics.middleware');
+
 const router = express.Router();
 
+router.use(analyticsMiddleware);
+// router.use(analyticsMiddleware); // Removed: Switched to client-side tracking using /analytics/track
 
 // Master Resume Routes
-router.get('/:username', analyticsMiddleware, getPublicResume);
-router.get('/:username/:version', analyticsMiddleware, getPublicResumeVersion);
+router.get('/:username', getPublicResume);
+router.get('/:username/:version', getPublicResumeVersion);
 
 // Locked Profile Routes
-router.get('/:username/v/:profileName', analyticsMiddleware, getPublicLockedProfile);
-router.get('/:username/v/:profileName/:version', analyticsMiddleware, getPublicLockedProfileVersion);
+router.get('/:username/v/:profileName', getPublicLockedProfile);
+router.get('/:username/v/:profileName/:version', getPublicLockedProfileVersion);
 
 module.exports = router;
