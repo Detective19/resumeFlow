@@ -4,7 +4,7 @@ const prisma = require('../utils/prisma');
 
 const analyticsMiddleware = (req, res, next) => {
     res.on('finish', async () => {
-        if (res.statusCode === 200) {
+        if (res.statusCode === 200 || res.statusCode === 304) {
             try {
                 const { username, version, profileName } = req.params;
                 let ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress || '127.0.0.1';
