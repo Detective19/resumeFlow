@@ -50,9 +50,15 @@ export default function PublicResume() {
 
         const trackView = async () => {
             try {
-                // Use Vercel API proxy to capture geo headers
-                // In local development, ensure you run 'vercel dev' or accept that this might 404 without proxy config
-                await axios.post('/api/analytics/track', {
+                // Determine endpoint based on environment
+                // Local Dev (Vite): internal /api won't work without vercel dev, so hit backend directly
+                // Production (Vercel): use /api/analytics/track proxy to capture headers
+                const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+                const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+
+                const endpoint = isLocal ? `${baseUrl}/analytics/track` : '/api/analytics/track';
+
+                await axios.post(endpoint, {
                     username,
                     version,
                     profileName,
