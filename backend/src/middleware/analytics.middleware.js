@@ -20,8 +20,10 @@ const analyticsMiddleware = (req, res, next) => {
                 if (ip === '::1') ip = '127.0.0.1';
 
                 const geo = geoip.lookup(ip);
-                const country = geo ? geo.country : 'Unknown';
-                const city = geo ? geo.city : 'Unknown';
+
+                // Prioritize Vercel headers, fallback to geoip-lite, then 'Unknown'
+                const country = req.headers['x-vercel-ip-country'] || (geo ? geo.country : 'Unknown');
+                const city = req.headers['x-vercel-ip-city'] || (geo ? geo.city : 'Unknown');
 
                 const userAgent = req.headers['user-agent'];
                 const parser = new UAParser(userAgent);
