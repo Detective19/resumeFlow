@@ -21,12 +21,15 @@ const analyticsMiddleware = (req, res, next) => {
 
                 const geo = geoip.lookup(ip);
 
-                // Prioritize Vercel headers, fallback to geoip-lite, then 'Unknown'
-                const country = req.headers['x-vercel-ip-country'] || (geo ? geo.country : 'Unknown');
-                const city = req.headers['x-vercel-ip-city'] || (geo ? geo.city : 'Unknown');
+                // Check for various location headers (Vercel, Cloudflare, AWS)
+                const country = req.headers['x-vercel-ip-country'] || req.headers['cf-ipcountry'] || req.headers['cloudfront-viewer-country'] || (geo ? geo.country : 'Unknown');
+                const city = req.headers['x-vercel-ip-city'] || req.headers['cf-ipcity'] || (geo ? geo.city : 'Unknown');
 
                 if (country === 'Unknown') {
-                    console.log('Analytics Location Unknown. Headers:', JSON.stringify(req.headers));
+                    // Log raw IP and headers for debugging
+                    console.log('Analytics Location Unknown.');
+                    console.log('Detected IP:', ip);
+                    console.log('Headers:', JSON.stringify(req.headers));
                 }
 
                 const userAgent = req.headers['user-agent'];
