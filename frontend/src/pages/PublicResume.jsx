@@ -13,7 +13,8 @@ export default function PublicResume() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                let url = 'http://localhost:3000/public';
+                const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+                let url = `${baseUrl}/public`;
                 const isLockedProfile = location.pathname.includes('/v/');
 
                 if (isLockedProfile) {
