@@ -236,14 +236,14 @@ export default function Generate() {
             <div className="w-full md:w-1/2 p-4 md:p-6 flex flex-col h-auto md:h-full">
                 <div className="bg-white border border-gray-200 rounded-lg shadow-sm flex-1 flex flex-col overflow-visible md:overflow-hidden">
                     {/* Editor Header - Fixed */}
-                    <header className="flex justify-between items-center px-4 py-4 md:px-8 md:py-6 border-b border-gray-100 bg-white z-10">
-                        <div className="flex items-center gap-3">
+                    <header className="flex justify-between items-center px-3 py-3 md:px-8 md:py-6 border-b border-gray-100 bg-white z-10">
+                        <div className="flex items-center gap-2 md:gap-3">
                             <div className="p-2 bg-purple-50 rounded-lg border border-purple-100">
                                 <Pencil className="text-purple-600" size={18} />
                             </div>
-                            <h2 className="text-lg font-bold text-gray-900 tracking-tight">Editor</h2>
+                            <h2 className="text-lg font-bold text-gray-900 tracking-tight hidden md:block">Editor</h2>
                         </div>
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-2 md:gap-3">
                             <select
                                 value={fontStyle}
                                 onChange={(e) => setFontStyle(e.target.value)}
@@ -435,8 +435,8 @@ export default function Generate() {
                     <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-white/80 backdrop-blur-md border border-gray-200/50 px-4 py-1.5 rounded-full text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] z-10 shadow-sm flex items-center gap-2">
                         <Star size={10} className="text-amber-400 fill-amber-400" /> Live Preview <Star size={10} className="text-amber-400 fill-amber-400" />
                     </div>
-                    <div className="flex-1 overflow-y-auto p-12 pt-16 flex justify-center bg-gray-100/30">
-                        <div className="scale-90 origin-top h-fit hover:scale-[0.92] transition-transform duration-500">
+                    <div className="flex-1 overflow-y-auto p-2 md:p-12 pt-8 md:pt-16 flex justify-center bg-gray-100/30 overflow-x-hidden">
+                        <div className="scale-[0.45] md:scale-90 origin-top h-fit transition-transform duration-500">
                             <ResumeViewer data={resumeData} fontStyle={fontStyle} />
                         </div>
                     </div>
