@@ -44,6 +44,29 @@ export default function PublicResume() {
         fetchData();
     }, [username, version, profileName, location.pathname]);
 
+    // Analytics Tracking
+    useEffect(() => {
+        if (!data) return;
+
+        const trackView = async () => {
+            try {
+                const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+                await axios.post(`${baseUrl}/analytics/track`, {
+                    username,
+                    version,
+                    profileName,
+                    userAgent: navigator.userAgent,
+                    platform: navigator.platform,
+                    screenWidth: window.innerWidth
+                });
+            } catch (err) {
+                console.warn('Analytics tracking failed', err);
+            }
+        };
+
+        trackView();
+    }, [data, username, version, profileName]);
+
     if (loading) return <div className="p-10 text-center">Loading...</div>;
     if (error) return <div className="p-10 text-center text-red-500 font-bold">{error}</div>;
 
