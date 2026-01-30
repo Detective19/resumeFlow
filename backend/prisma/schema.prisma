@@ -1,0 +1,89 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  username     String   @unique
+  email        String   @unique
+  passwordHash String
+  resume       Resume?
+  lockedProfiles LockedProfile[]
+  createdAt    DateTime @default(now())
+}
+
+model Resume {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id])
+  versions  ResumeVersion[]
+  createdAt DateTime @default(now())
+}
+
+model ResumeVersion {
+  id            String   @id @default(cuid())
+  resumeId      String
+  resume        Resume   @relation(fields: [resumeId], references: [id])
+  versionNumber Int
+  content       Json
+  isMaster      Boolean  @default(true)
+  isArchived    Boolean  @default(false)
+  createdAt     DateTime @default(now())
+
+  @@unique([resumeId, versionNumber])
+}
+
+model LockedProfile {
+  id        String   @id @default(cuid())
+  name      String
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+
+  versions  LockedProfileVersion[]
+
+  createdAt DateTime @default(now())
+
+  @@unique([userId, name])
+}
+
+model LockedProfileVersion {
+  id              String   @id @default(cuid())
+  lockedProfileId String
+  lockedProfile   LockedProfile @relation(fields: [lockedProfileId], references: [id])
+
+  versionNumber   Int
+  content         Json
+  isMaster        Boolean  @default(true)
+
+  createdAt       DateTime @default(now())
+
+  @@unique([lockedProfileId, versionNumber])
+}
+
+model Template {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  isActive  Boolean  @default(true)
+
+  createdAt DateTime @default(now())
+}
+
+model AnalyticsEvent {
+  id             String   @id @default(cuid())
+  username       String
+  resumeType     String   // "master" | "locked"
+  profileName    String?  // null for master
+  versionNumber  Int?
+  country        String?
+  city           String?
+  device         String?  // "Desktop" | "Mobile" | "Tablet"
+  browser        String?
+  referrer       String?
+  userAgent      String?
+  viewedAt       DateTime @default(now())
+}

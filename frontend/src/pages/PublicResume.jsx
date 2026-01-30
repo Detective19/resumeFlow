@@ -1,0 +1,54 @@
+import { useEffect, useState } from 'react';
+import { useParams, useLocation } from 'react-router-dom';
+import axios from 'axios';
+import ResumeViewer from '../components/ResumeViewer';
+
+export default function PublicResume() {
+    const { username, version, profileName } = useParams();
+    const location = useLocation();
+    const [data, setData] = useState(null);
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                let url = 'http://localhost:3000/public';
+                const isLockedProfile = location.pathname.includes('/v/');
+
+                if (isLockedProfile) {
+                    // Locked Profile Route
+                    if (version) {
+                        url += `/${username}/v/${profileName}/${version}`;
+                    } else {
+                        url += `/${username}/v/${profileName}`;
+                    }
+                } else {
+                    // Standard Resume Route
+                    if (version) {
+                        url += `/${username}/${version}`;
+                    } else {
+                        url += `/${username}`;
+                    }
+                }
+
+                const response = await axios.get(url);
+                setData(response.data.content); // ResumeVersion.content is the JSON
+            } catch (err) {
+                setError('Resume not found');
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchData();
+    }, [username, version, profileName, location.pathname]);
+
+    if (loading) return <div className="p-10 text-center">Loading...</div>;
+    if (error) return <div className="p-10 text-center text-red-500 font-bold">{error}</div>;
+
+    return (
+        <div className="min-h-screen bg-gray-100 p-8">
+            <ResumeViewer data={data} />
+        </div>
+    );
+}
