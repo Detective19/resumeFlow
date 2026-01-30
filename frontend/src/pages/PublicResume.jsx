@@ -60,8 +60,8 @@ export default function PublicResume() {
 
                 await axios.post(endpoint, {
                     username,
-                    version,
-                    profileName,
+                    version: version || null,
+                    profileName: profileName || null,
                     userAgent: navigator.userAgent,
                     platform: navigator.platform,
                     screenWidth: window.innerWidth
