@@ -231,12 +231,12 @@ export default function Generate() {
     };
 
     return (
-        <div className="flex h-[calc(100vh-3.5rem)] bg-gray-50 overflow-hidden">
+        <div className="flex flex-col md:flex-row h-auto md:h-[calc(100vh-3.5rem)] bg-gray-50 overflow-y-auto md:overflow-hidden">
             {/* Editor Pane - Left Card */}
-            <div className="w-1/2 p-6 flex flex-col h-full">
-                <div className="bg-white border border-gray-200 rounded-lg shadow-sm flex-1 flex flex-col overflow-hidden">
+            <div className="w-full md:w-1/2 p-4 md:p-6 flex flex-col h-auto md:h-full">
+                <div className="bg-white border border-gray-200 rounded-lg shadow-sm flex-1 flex flex-col overflow-visible md:overflow-hidden">
                     {/* Editor Header - Fixed */}
-                    <header className="flex justify-between items-center px-8 py-6 border-b border-gray-100 bg-white z-10">
+                    <header className="flex justify-between items-center px-4 py-4 md:px-8 md:py-6 border-b border-gray-100 bg-white z-10">
                         <div className="flex items-center gap-3">
                             <div className="p-2 bg-purple-50 rounded-lg border border-purple-100">
                                 <Pencil className="text-purple-600" size={18} />
@@ -274,7 +274,7 @@ export default function Generate() {
                     </header>
 
                     {/* Scrollable Editor Content */}
-                    <div className="overflow-y-auto flex-1 p-8">
+                    <div className="overflow-visible md:overflow-y-auto flex-1 p-4 md:p-8">
                         <div className="space-y-12 max-w-3xl mx-auto">
                             {/* Personal */}
                             <section>
@@ -430,7 +430,7 @@ export default function Generate() {
             </div>
 
             {/* Preview Pane - Right Card */}
-            <div className="w-1/2 p-6 pl-0 flex flex-col h-full">
+            <div className="w-full md:w-1/2 p-4 md:p-6 md:pl-0 flex flex-col h-[500px] md:h-full">
                 <div className="bg-gray-100 border border-gray-200 rounded-xl shadow-sm flex-1 overflow-hidden relative flex flex-col">
                     <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-white/80 backdrop-blur-md border border-gray-200/50 px-4 py-1.5 rounded-full text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] z-10 shadow-sm flex items-center gap-2">
                         <Star size={10} className="text-amber-400 fill-amber-400" /> Live Preview <Star size={10} className="text-amber-400 fill-amber-400" />
