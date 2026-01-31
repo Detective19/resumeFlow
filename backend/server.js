@@ -1,6 +1,10 @@
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const path = require('path');
+
+// Ensure Puppeteer uses the local cache (must match .puppeteerrc.cjs)
+process.env.PUPPETEER_CACHE_DIR = path.join(__dirname, '.cache', 'puppeteer');
 
 dotenv.config();
 

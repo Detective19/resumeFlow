@@ -1,14 +1,31 @@
 const puppeteer = require('puppeteer');
 
 const generatePdf = async (html) => {
-    const browser = await puppeteer.launch({
-        headless: 'new',
-        args: ['--no-sandbox', '--disable-setuid-sandbox'] // Required for some environments
-    });
+    console.log('Starting PDF generation...');
+    console.log('Puppeteer Cache Dir:', process.env.PUPPETEER_CACHE_DIR);
 
+    let browser;
     try {
+        browser = await puppeteer.launch({
+            headless: 'new',
+            args: [
+                '--no-sandbox',
+                '--disable-setuid-sandbox',
+                '--disable-dev-shm-usage', // Critical for containerized environments
+                '--disable-gpu'
+            ]
+        });
+
+        console.log('Browser launched successfully');
         const page = await browser.newPage();
-        await page.setContent(html, { waitUntil: 'networkidle0' });
+
+        console.log('Setting content...');
+        await page.setContent(html, {
+            waitUntil: 'networkidle0',
+            timeout: 30000
+        });
+
+        console.log('Generating PDF buffer...');
         const pdfBuffer = await page.pdf({
             format: 'A4',
             printBackground: true,
@@ -20,9 +37,15 @@ const generatePdf = async (html) => {
             }
         });
 
+        console.log('PDF generated successfully');
         return pdfBuffer;
+    } catch (error) {
+        console.error('PDF Generation Failed:', error);
+        throw error;
     } finally {
-        await browser.close();
+        if (browser) {
+            await browser.close();
+        }
     }
 };
 
