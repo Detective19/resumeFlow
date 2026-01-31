@@ -11,6 +11,26 @@ export default function PublicResume() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        const fetchLocation = async () => {
+            try {
+                // 1.5s timeout to ensure resume loads fast even if geo-api is slow
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 1500);
+
+                const res = await fetch('https://ipapi.co/json/', { signal: controller.signal });
+                clearTimeout(timeoutId);
+
+                if (res.ok) {
+                    const data = await res.json();
+                    return { city: data.city, country: data.country_name };
+                }
+            } catch (e) {
+                // Silently fail to console to keep UI clean
+                console.warn('Location lookup skipped:', e.message);
+            }
+            return null;
+        };
+
         const fetchData = async () => {
             try {
                 const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
@@ -33,10 +53,20 @@ export default function PublicResume() {
                     }
                 }
 
-                // Cache Busting: Append timestamp to force fresh request
-                const timestamp = Date.now();
+                // Append Analytics Data
+                const loc = await fetchLocation();
+                const params = new URLSearchParams();
+
+                // Cache Busting
+                params.append('_t', Date.now());
+
+                if (loc) {
+                    if (loc.city) params.append('city', loc.city);
+                    if (loc.country) params.append('country', loc.country);
+                }
+
                 const separator = url.includes('?') ? '&' : '?';
-                url += `${separator}_t=${timestamp}`;
+                url += `${separator}${params.toString()}`;
 
                 const response = await axios.get(url);
                 setData(response.data.content); // ResumeVersion.content is the JSON
