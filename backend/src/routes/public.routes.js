@@ -5,6 +5,7 @@ const {
     getPublicLockedProfile,
     getPublicLockedProfileVersion
 } = require('../controllers/public.controller');
+const analyticsMiddleware = require('../middleware/analytics.middleware');
 const router = express.Router();
 
 
