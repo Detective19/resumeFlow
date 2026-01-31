@@ -16,3 +16,6 @@ yarn-error.log*
 
 # mac
 .DS_Store
+
+# puppeteer cache
+.cache/
