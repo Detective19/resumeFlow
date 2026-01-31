@@ -38,7 +38,7 @@ Think of it as **"GitHub for Resumes"** — every change is tracked, every versi
 ✅ **6 Professional Themes** — Modern, Classic, Creative, Technical, Minimal, Professional.
 
 ### For Power Users
-📊 **Analytics Dashboard** — Track views, devices, geography, and traffic sources.  
+📊 **Analytics Dashboard** — Track views, devices, and geography (City/Country) with privacy-focused client-side detection.  
 🎨 **Customization** — Choose colors, fonts, and layouts that match your style.  
 📱 **Mobile Friendly** — Works perfectly on phones, tablets, and desktops.  
 🔐 **Secure** — JWT authentication keeps your data safe.
@@ -229,7 +229,7 @@ This isn't just another resume builder. Here's what sets it apart:
 
 Ideas for future improvements:
 
-- [ ] Export resume as PDF
+- [x] Export resume as PDF
 - [ ] Import from LinkedIn
 - [ ] Resume templates marketplace
 - [ ] AI-powered resume suggestions
