@@ -38,23 +38,7 @@ app.use((req, res, next) => {
 // Health Check
 app.get('/health', (req, res) => res.status(200).json({ status: 'ok' }));
 
-// Location Debug Endpoint (Temporary)
-const geoip = require('geoip-lite');
-app.get('/debug-location', (req, res) => {
-  const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
-  const geo = geoip.lookup(typeof ip === 'string' ? ip.split(',')[0].trim() : ip);
-  res.json({
-    trustProxy: app.get('trust proxy'),
-    detectedIp: ip,
-    parsedGeo: geo,
-    headers: {
-      'x-forwarded-for': req.headers['x-forwarded-for'],
-      'x-vercel-ip-country': req.headers['x-vercel-ip-country'],
-      'cf-ipcountry': req.headers['cf-ipcountry'],
-      'cloudfront-viewer-country': req.headers['cloudfront-viewer-country']
-    }
-  });
-});
+// Location Debug Endpoint REMOVED (Client-side source of truth now)
 
 // Apply Rate Limits
 app.use('/public', publicLimiter);
