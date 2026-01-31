@@ -55,4 +55,5 @@ app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
+  console.log(`Trust Proxy setting: ${app.get('trust proxy')}`);
 });
