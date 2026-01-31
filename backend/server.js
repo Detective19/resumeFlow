@@ -3,11 +3,6 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const path = require('path');
 
-// Ensure Puppeteer uses the local cache (must match postinstall & .puppeteerrc.cjs)
-// We use process.cwd() to be safe across build/runtime phases
-process.env.PUPPETEER_CACHE_DIR = path.join(process.cwd(), '.cache', 'puppeteer');
-console.log('Configs: Force-set PUPPETEER_CACHE_DIR to:', process.env.PUPPETEER_CACHE_DIR);
-
 dotenv.config();
 
 const authRoutes = require('./src/routes/auth.routes');
