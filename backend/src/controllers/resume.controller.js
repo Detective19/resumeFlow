@@ -44,7 +44,10 @@ const createVersion = async (req, res) => {
             });
 
             return newVersion;
-        }, { timeout: 20000 });
+        }, {
+            maxWait: 10000, // Wait max 10s for a connection
+            timeout: 50000  // Allow 50s for the transaction to run
+        });
 
         res.json(result);
     } catch (error) {
@@ -181,7 +184,10 @@ const setVersionLive = async (req, res) => {
 
             console.log(`Successfully created new live version ${nextVersionNumber}`);
             return newLiveVersion;
-        }, { timeout: 20000 });
+        }, {
+            maxWait: 10000,
+            timeout: 50000
+        });
 
         res.json(result);
 
