@@ -44,7 +44,7 @@ const createVersion = async (req, res) => {
             });
 
             return newVersion;
-        });
+        }, { timeout: 20000 });
 
         res.json(result);
     } catch (error) {
@@ -181,7 +181,7 @@ const setVersionLive = async (req, res) => {
 
             console.log(`Successfully created new live version ${nextVersionNumber}`);
             return newLiveVersion;
-        });
+        }, { timeout: 20000 });
 
         res.json(result);
 
