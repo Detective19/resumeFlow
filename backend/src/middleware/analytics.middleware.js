@@ -7,29 +7,48 @@ const analyticsMiddleware = (req, res, next) => {
         if (res.statusCode === 200 || res.statusCode === 304) {
             try {
                 const { username, version, profileName } = req.params;
-                let ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress || '127.0.0.1';
 
-                // Handle multiple IPs in x-forwarded-for (e.g. "client, proxy")
-                if (Array.isArray(ip)) {
-                    ip = ip[0];
-                } else if (typeof ip === 'string' && ip.includes(',')) {
-                    ip = ip.split(',')[0].trim();
+                // 1. Robust IP Detection
+                // req.ip in Express is trustworthy if 'trust proxy' is set correctly in server.js
+                // It automatically handles x-forwarded-for parsing
+                let ip = req.ip || req.headers['x-forwarded-for'] || req.socket.remoteAddress || '127.0.0.1';
+
+                // Handle array/list format from custom headers
+                if (Array.isArray(ip)) ip = ip[0];
+                if (typeof ip === 'string' && ip.includes(',')) ip = ip.split(',')[0].trim();
+
+                // Clean IPv6 mapped IPv4 addresses (e.g., ::ffff:192.168.1.1 -> 192.168.1.1)
+                if (ip && ip.startsWith('::ffff:')) {
+                    ip = ip.substring(7);
                 }
 
-                // Handle IPv6 localhost
+                // Handle Localhost IPv6
                 if (ip === '::1') ip = '127.0.0.1';
 
-                const geo = geoip.lookup(ip);
+                let geo = geoip.lookup(ip);
 
-                // Check for various location headers (Vercel, Cloudflare, AWS)
-                const country = req.headers['x-vercel-ip-country'] || req.headers['cf-ipcountry'] || req.headers['cloudfront-viewer-country'] || (geo ? geo.country : 'Unknown');
-                const city = req.headers['x-vercel-ip-city'] || req.headers['cf-ipcity'] || (geo ? geo.city : 'Unknown');
+                // 2. Development Mode Mock (To fix "Local Visit" during local testing)
+                // If running locally and IP is local, mock a location to verify UI
+                const isLocal = ip === '127.0.0.1' || ip.startsWith('192.168.') || ip.startsWith('10.');
+                if (!geo && isLocal && process.env.NODE_ENV !== 'production') {
+                    console.log('📍 Dev Mode: Mocking location for local IP', ip);
+                    geo = { country: 'US', city: 'San Francisco' };
+                }
+
+                // 3. Location Extraction with Fallbacks
+                // Check Vercel/Cloudflare headers first, then geoip, then default
+                const country = req.headers['x-vercel-ip-country'] ||
+                    req.headers['cf-ipcountry'] ||
+                    req.headers['cloudfront-viewer-country'] ||
+                    (geo ? geo.country : 'Unknown');
+
+                const city = req.headers['x-vercel-ip-city'] ||
+                    req.headers['cf-ipcity'] ||
+                    (geo ? geo.city : 'Unknown');
 
                 if (country === 'Unknown') {
-                    // Log raw IP and headers for debugging
-                    console.log('Analytics Location Unknown.');
-                    console.log('Detected IP:', ip);
-                    console.log('Headers:', JSON.stringify(req.headers));
+                    // Log raw IP for debugging only if we missed the location
+                    console.log('Analytics Location Unknown. IP:', ip, 'Headers:', JSON.stringify(req.headers['x-forwarded-for']));
                 }
 
                 const userAgent = req.headers['user-agent'];

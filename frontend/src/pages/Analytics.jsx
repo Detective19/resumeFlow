@@ -308,8 +308,11 @@ export default function Analytics() {
                                         <td className="px-8 py-5">
                                             <div className="flex items-center gap-2 text-sm text-gray-600 font-medium">
                                                 <Map size={14} className="text-gray-300" />
-                                                {view.city && view.city !== 'Unknown' ? `${view.city}, ` : ''}
-                                                {view.country === 'Unknown' ? 'Local Visit' : view.country}
+                                                {(view.city && view.city !== 'Unknown') ? (
+                                                    <span>{view.city}, {view.country}</span>
+                                                ) : (
+                                                    <span>{view.country === 'Unknown' ? 'Local Visit' : view.country}</span>
+                                                )}
                                             </div>
                                         </td>
                                         <td className="px-8 py-5 text-right">
